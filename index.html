@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Для Фари ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100vh;
+            /* Светло-розовый нежный фон */
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
+            font-family: 'Nunito', sans-serif;
+            overflow: hidden;
+            /* Отключаем прокрутку экрана при свайпах, чтобы удобно было тянуть веревку */
+            touch-action: none; 
+        }
+
+        h1 {
+            color: #d81b60;
+            font-family: 'Caveat', cursive;
+            font-size: 3rem;
+            text-align: center;
+            margin-top: 10vh;
+            padding: 0 20px;
+            text-shadow: 1px 1px 3px rgba(216, 27, 96, 0.2);
+            line-height: 1.1;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Контейнер для веревки на весь экран */
+        #rope-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+        }
+
+        #status-text {
+            position: absolute;
+            bottom: 15vh;
+            font-size: 2rem;
+            font-family: 'Caveat', cursive;
+            color: #ff4b82;
+            text-align: center;
+            width: 100%;
+            transition: color 0.3s;
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Порви эту веревку, чтобы разорвать отношения с Али 💔</h1>
+    
+    <div id="rope-container">
+        <svg id="rope-svg" width="100%" height="100%">
+            <path id="rope" d="" stroke="#8B4513" stroke-width="25" fill="transparent" stroke-linecap="round"/>
+            <circle id="anchor-left" cx="0" cy="0" r="15" fill="#4a2508"/>
+            <circle id="anchor-right" cx="0" cy="0" r="15" fill="#4a2508"/>
+        </svg>
+    </div>
+
+    <div id="status-text">Тяни её вниз или вверх! 👇</div>
+
+    <script>
+        const svg = document.getElementById('rope-svg');
+        const rope = document.getElementById('rope');
+        const anchorLeft = document.getElementById('anchor-left');
+        const anchorRight = document.getElementById('anchor-right');
+        const statusText = document.getElementById('status-text');
+
+        let width, height;
+        let startX, startY, endX, endY;
+        let cx, cy; // Контрольная точка изгиба (середина)
+        let targetCx, targetCy;
+        let vx = 0, vy = 0; // Скорость для физики пружины
+
+        let isDragging = false;
+
+        // Настройки физики веревки
+        const spring = 0.15; // Насколько сильно отпружинивает обратно
+        const friction = 0.75; // Сопротивление (чтобы веревка покачалась и остановилась)
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            
+            // Точки крепления веревки по краям экрана
+            startX = 20;
+            startY = height / 2;
+            endX = width - 20;
+            endY = height / 2;
+
+            // Центр экрана - куда веревка всегда хочет вернуться
+            targetCx = width / 2;
+            targetCy = height / 2;
+
+            if (!isDragging) {
+                cx = targetCx;
+                cy = targetCy;
+            }
+
+            anchorLeft.setAttribute('cx', startX);
+            anchorLeft.setAttribute('cy', startY);
+            anchorRight.setAttribute('cx', endX);
+            anchorRight.setAttribute('cy', endY);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Анимация веревки
+        function updateRope() {
+            if (!isDragging) {
+                // Физика пружины, если веревку отпустили
+                const ax = (targetCx - cx) * spring;
+                const ay = (targetCy - cy) * spring;
+                
+                vx += ax;
+                vy += ay;
+                
+                vx *= friction;
+                vy *= friction;
+                
+                cx += vx;
+                cy += vy;
+            }
+
+            // Рисуем изогнутую линию (кривая Безье)
+            rope.setAttribute('d', `M ${startX} ${startY} Q ${cx} ${cy} ${endX} ${endY}`);
+            
+            requestAnimationFrame(updateRope);
+        }
+        updateRope();
+
+        // Обработка касаний и мыши
+        function handleStart(e) {
+            isDragging = true;
+            handleMove(e);
+            statusText.innerText = "Она слишком крепкая! 😱";
+            statusText.style.color = "#d81b60";
+        }
+
+        function handleMove(e) {
+            if (!isDragging) return;
+            
+            let clientX, clientY;
+            if (e.touches) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            
+            cx = clientX;
+            cy = clientY;
+        }
+
+        function handleEnd() {
+            if (isDragging) {
+                isDragging = false;
+                statusText.innerText = "Наша связь неразрывна! ❤️";
+                statusText.style.color = "#d81b60";
+            }
+        }
+
+        // События для мыши (если открывать с ПК)
+        svg.addEventListener('mousedown', handleStart);
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', handleEnd);
+
+        // События для пальца (для смартфонов)
+        svg.addEventListener('touchstart', handleStart, {passive: false});
+        window.addEventListener('touchmove', handleMove, {passive: false});
+        window.addEventListener('touchend', handleEnd);
+    </script>
+</body>
+</html>
