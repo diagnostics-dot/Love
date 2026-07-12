@@ -3,188 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Для Фари ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+    <title>Прости меня 🥺</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Nunito:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
             height: 100vh;
-            /* Светло-розовый нежный фон */
-            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
+            background: linear-gradient(135deg, #ffe6fa 0%, #ffc0cb 100%);
             font-family: 'Nunito', sans-serif;
             overflow: hidden;
-            /* Отключаем прокрутку экрана при свайпах, чтобы удобно было тянуть веревку */
-            touch-action: none; 
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            padding: 20px;
         }
 
         h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 4rem;
             color: #d81b60;
-            font-family: 'Caveat', cursive;
-            font-size: 3rem;
-            text-align: center;
-            margin-top: 10vh;
-            padding: 0 20px;
-            text-shadow: 1px 1px 3px rgba(216, 27, 96, 0.2);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(216, 27, 96, 0.2);
             line-height: 1.1;
-            z-index: 10;
-            pointer-events: none;
         }
 
-        /* Контейнер для веревки на весь экран */
-        #rope-container {
-            position: absolute;
-            top: 0;
-            left: 0;
+        p {
+            font-size: 1.5rem;
+            color: #880e4f;
+            margin-bottom: 40px;
+        }
+
+        .buttons-wrapper {
+            position: relative;
             width: 100%;
-            height: 100%;
-            z-index: 5;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
         }
 
-        #status-text {
-            position: absolute;
-            bottom: 15vh;
-            font-size: 2rem;
-            font-family: 'Caveat', cursive;
+        button {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        #btn-yes {
+            background: linear-gradient(45deg, #ff4b82, #ff758c);
+            color: white;
+            z-index: 20;
+        }
+
+        #btn-yes:active {
+            transform: scale(0.95);
+        }
+
+        #btn-no {
+            background-color: white;
             color: #ff4b82;
+            position: absolute;
+            /* Плавное убегание кнопки */
+            transition: left 0.3s ease, top 0.3s ease;
+            z-index: 15;
+        }
+
+        #success-screen {
+            display: none;
             text-align: center;
-            width: 100%;
-            transition: color 0.3s;
-            pointer-events: none;
             z-index: 10;
+            animation: fadeIn 1s;
+        }
+
+        #success-screen h1 {
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+        }
+
+        .gif-container img {
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(216, 27, 96, 0.3);
+            max-width: 80%;
+            border: 5px solid white;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -20px;
+            font-size: 1.5rem;
+            color: rgba(255, 75, 130, 0.6);
+            animation: floatUp 5s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-120vh) scale(1.5) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <h1>Порви эту веревку, чтобы разорвать отношения с Али 💔</h1>
-    
-    <div id="rope-container">
-        <svg id="rope-svg" width="100%" height="100%">
-            <path id="rope" d="" stroke="#8B4513" stroke-width="25" fill="transparent" stroke-linecap="round"/>
-            <circle id="anchor-left" cx="0" cy="0" r="15" fill="#4a2508"/>
-            <circle id="anchor-right" cx="0" cy="0" r="15" fill="#4a2508"/>
-        </svg>
+    <div class="container" id="question-container">
+        <h1>Прости меня 🥺</h1>
+        <p>Фари, ты меня прощаешь?</p>
+        
+        <div class="buttons-wrapper">
+            <button id="btn-yes">Да!</button>
+            <button id="btn-no">Нет</button>
+        </div>
     </div>
 
-    <div id="status-text">Тяни её вниз или вверх! 👇</div>
+    <div id="success-screen">
+        <h1>Ура! Я люблю тебя! ❤️</h1>
+        <div class="gif-container">
+            <!-- Милая гифка с обнимающимися мишками -->
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMTI3MmM1M2U2YzI3MmNiY2I0M2Q3NjA5ZTI1YmE3NjEwYmU5MzQ3ZCZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/f3IWwxbU39aQ4015fG/giphy.gif" alt="Hugs">
+        </div>
+    </div>
 
     <script>
-        const svg = document.getElementById('rope-svg');
-        const rope = document.getElementById('rope');
-        const anchorLeft = document.getElementById('anchor-left');
-        const anchorRight = document.getElementById('anchor-right');
-        const statusText = document.getElementById('status-text');
+        // Анимация фоновых сердечек
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            const hearts = ['❤️', '💖', '💕', '🌸', '🥺'];
+            heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+            heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 6000);
+        }
 
-        let width, height;
-        let startX, startY, endX, endY;
-        let cx, cy; // Контрольная точка изгиба (середина)
-        let targetCx, targetCy;
-        let vx = 0, vy = 0; // Скорость для физики пружины
+        setInterval(createHeart, 400);
 
-        let isDragging = false;
+        // Логика кнопок
+        const btnNo = document.getElementById('btn-no');
+        const btnYes = document.getElementById('btn-yes');
+        const questionContainer = document.getElementById('question-container');
+        const successScreen = document.getElementById('success-screen');
 
-        // Настройки физики веревки
-        const spring = 0.15; // Насколько сильно отпружинивает обратно
-        const friction = 0.75; // Сопротивление (чтобы веревка покачалась и остановилась)
+        // Изначально ставим кнопку "Нет" рядом с "Да"
+        btnNo.style.left = "calc(50% + 10px)";
+        btnNo.style.top = "50px";
 
-        function resize() {
-            width = window.innerWidth;
-            height = window.innerHeight;
+        // Функция убегания кнопки
+        function runAway() {
+            const maxX = window.innerWidth - btnNo.offsetWidth - 20;
+            const maxY = window.innerHeight - btnNo.offsetHeight - 20;
             
-            // Точки крепления веревки по краям экрана
-            startX = 20;
-            startY = height / 2;
-            endX = width - 20;
-            endY = height / 2;
-
-            // Центр экрана - куда веревка всегда хочет вернуться
-            targetCx = width / 2;
-            targetCy = height / 2;
-
-            if (!isDragging) {
-                cx = targetCx;
-                cy = targetCy;
-            }
-
-            anchorLeft.setAttribute('cx', startX);
-            anchorLeft.setAttribute('cy', startY);
-            anchorRight.setAttribute('cx', endX);
-            anchorRight.setAttribute('cy', endY);
-        }
-
-        window.addEventListener('resize', resize);
-        resize();
-
-        // Анимация веревки
-        function updateRope() {
-            if (!isDragging) {
-                // Физика пружины, если веревку отпустили
-                const ax = (targetCx - cx) * spring;
-                const ay = (targetCy - cy) * spring;
-                
-                vx += ax;
-                vy += ay;
-                
-                vx *= friction;
-                vy *= friction;
-                
-                cx += vx;
-                cy += vy;
-            }
-
-            // Рисуем изогнутую линию (кривая Безье)
-            rope.setAttribute('d', `M ${startX} ${startY} Q ${cx} ${cy} ${endX} ${endY}`);
+            // Генерируем случайные координаты
+            const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(10, Math.floor(Math.random() * maxY));
             
-            requestAnimationFrame(updateRope);
-        }
-        updateRope();
-
-        // Обработка касаний и мыши
-        function handleStart(e) {
-            isDragging = true;
-            handleMove(e);
-            statusText.innerText = "Она слишком крепкая! 😱";
-            statusText.style.color = "#d81b60";
+            // Меняем позиционирование на fixed, чтобы летать по всему экрану
+            btnNo.style.position = 'fixed';
+            btnNo.style.left = `${randomX}px`;
+            btnNo.style.top = `${randomY}px`;
         }
 
-        function handleMove(e) {
-            if (!isDragging) return;
-            
-            let clientX, clientY;
-            if (e.touches) {
-                clientX = e.touches[0].clientX;
-                clientY = e.touches[0].clientY;
-            } else {
-                clientX = e.clientX;
-                clientY = e.clientY;
-            }
-            
-            cx = clientX;
-            cy = clientY;
-        }
+        // Кнопка убегает при наведении мышки (для ПК)
+        btnNo.addEventListener('mouseover', runAway);
+        
+        // Кнопка убегает при попытке нажать пальцем (для телефона)
+        btnNo.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Запрещаем клик
+            runAway();
+        }, { passive: false });
 
-        function handleEnd() {
-            if (isDragging) {
-                isDragging = false;
-                statusText.innerText = "Наша связь неразрывна! ❤️";
-                statusText.style.color = "#d81b60";
-            }
-        }
-
-        // События для мыши (если открывать с ПК)
-        svg.addEventListener('mousedown', handleStart);
-        window.addEventListener('mousemove', handleMove);
-        window.addEventListener('mouseup', handleEnd);
-
-        // События для пальца (для смартфонов)
-        svg.addEventListener('touchstart', handleStart, {passive: false});
-        window.addEventListener('touchmove', handleMove, {passive: false});
-        window.addEventListener('touchend', handleEnd);
+        // Если она нажмет "Да!"
+        btnYes.addEventListener('click', () => {
+            questionContainer.style.display = 'none';
+            successScreen.style.display = 'block';
+            // Делаем больше сердечек от радости
+            setInterval(createHeart, 150);
+        });
     </script>
+
 </body>
 </html>
